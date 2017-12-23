@@ -38,13 +38,12 @@ public class txGenerator {
     }
 
     private Transaction randomTransaction() {
-        if(accounts !=null){
+        try{
             Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), new BigInteger(randomBytes(2)), new BigInteger(randomBytes(1)), null);
             transaction.sign(randomAccount().getEcKey());
             return transaction;
         }
-        else {
-            System.out.println("accounts null");
+        catch(NullPointerException e) {
             return null;
         }
 
@@ -53,9 +52,18 @@ public class txGenerator {
     private Transaction randomValidTx()throws NullPointerException{
         Account a = randomAccount();
         BigInteger amount;
-        do {
-            amount = new BigInteger(a.getBalance().bitLength(), this.rand);
-        } while (amount.compareTo(a.getBalance()) >= 0);
+        /**
+         * Find a random BigInteger between the current balance and zero. If the current balance is zero, just return this.
+         */
+        try{
+            do {
+                amount = new BigInteger(a.getBalance().bitLength(), this.rand);
+            } while (amount.compareTo(a.getBalance()) >= 0);
+        }
+        catch(NullPointerException e){
+                amount = new BigInteger(0, this.rand);
+        }
+
         if(accounts != null){
             Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), amount, new BigInteger(randomBytes(1)), null);
             return transaction;
@@ -93,12 +101,14 @@ public class txGenerator {
 //    }
 
     private Account randomAccount() throws NullPointerException {
-        if(accounts != null)
+        try{
+            System.out.println(accounts.size());
             return accounts.get(rand.nextInt(accounts.size()));
-        else {
-            System.out.println("Null accounts");
+        }
+        catch(NullPointerException e) {
             return null;
         }
+    }
 
 
     public Transaction[] generateRandomTxArray(int numTx) {
@@ -110,8 +120,8 @@ public class txGenerator {
                 counter++;
             }
         return txs;
-
     }
+
     public Transaction[] generateValidTxArray(int numTx){
         int counter = 0;
         Transaction[] txs = new Transaction[numTx];
@@ -127,7 +137,7 @@ public class txGenerator {
 
 
 
-    }
+}
 
 
 

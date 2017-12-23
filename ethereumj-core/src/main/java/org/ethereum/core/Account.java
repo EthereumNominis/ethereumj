@@ -55,6 +55,15 @@ public class Account {
         address = this.ecKey.getAddress();
     }
 
+    /**
+     * ~~~~~~~~~~~~~~~~~~~~ USED FOR TEST PURPOSES ONLY DELETE IN FINAL VERSION ~~~~~~~~~~~~~~~~
+     */
+    public void setBalance(BigInteger amount){
+        this.repository.addBalance(this.address,amount);
+        System.out.println("balance added without error");
+    }
+
+
     public void init(ECKey ecKey) {
         this.ecKey = ecKey;
         address = this.ecKey.getAddress();
