@@ -129,6 +129,7 @@ public class StandaloneBlockchainTest {
         // check that invalid tx doesn't break implementation
         StandaloneBlockchain sb = new StandaloneBlockchain();
         ECKey alice = sb.getSender();
+        //System.out.println(alice);
         ECKey bob = new ECKey();
         sb.sendEther(bob.getAddress(), BigInteger.valueOf(1000));
         sb.setSender(bob);
