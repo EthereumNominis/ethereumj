@@ -1,6 +1,8 @@
 package org.nominis.export;
 
 import org.ethereum.core.Account;
+import org.ethereum.core.Transaction;
+import org.ethereum.util.blockchain.StandaloneBlockchain;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.ethereum.mithril.accountGenerator;
 import org.spongycastle.util.encoders.Hex;
 
 import static org.ethereum.util.blockchain.EtherUtil.Unit.ETHER;
@@ -24,20 +25,30 @@ import static org.ethereum.util.blockchain.EtherUtil.convert;
  * create_time: 9:33 AM
  **/
 
-public class preallocGenesisTest {
+public class StandardBlockMiningTest {
 
     //WARNING YOU WILL WANT TO ALTER THIS STRING FOR YOUR LOCAL MACHINE !!!
     public static final String PATH = "/Users/harrisonhicks/Documents/github_nominis/ethereumj/ethereumj-core/src/test/java/org/nominis/export/resources/allocated-genesis.json";
+    public StandaloneBlockchain sb;
+    public ArrayList<Account> accounts;
+    public ArrayList<Transaction> transactions;
 
+    /**
+     * Tests accountGenerator to create a list of accounts, and writes to json file.
+     */
     @Test
     public void toJsonFile() {
+
+        //create arrayList of accounts.
         Random rand = new Random();
         accountGenerator aGen = new accountGenerator(5);
-        ArrayList<Account> Accounts = aGen.getGeneratedAccounts(12);
+        accounts = aGen.getGeneratedAccounts(12);
+
+        //initializes random initial balance amounts using the alloc field in the genesis block and writes to json file.
         JSONObject addresses = new JSONObject();
         JSONObject genesisJSon = new JSONObject();
         JSONObject balance;
-        for(Account a : Accounts ) {
+        for(Account a : accounts ) {
             balance = new JSONObject();
             balance.put("balance",convert(Math.abs(rand.nextLong()), ETHER).toString());
             addresses.put(Hex.toHexString(a.getAddress()),balance);
@@ -65,4 +76,20 @@ public class preallocGenesisTest {
             System.out.println("Java IO exception caught when trying to write to file");
         }
     }
+
+    @Test
+    public void multipleTransactions(){
+        accountGenerator aGen = new accountGenerator(5);
+        transactions = createTransactions.getTransactions(accounts,10);
+
+        int counter = 0;
+        for(Transaction tRandom : transactions){
+            System.out.println("Transaction "+counter);
+            System.out.println(tRandom.toString());
+            System.out.println("Raw transaction "+counter+" data: 0x{}" + org.apache.commons.codec.binary.Hex.encodeHexString(tRandom.getEncodedRaw()));
+            counter++;
+        }
+
+    }
 }
+
