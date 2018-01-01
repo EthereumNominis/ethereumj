@@ -1,20 +1,26 @@
 package org.nominis.export;
 
 import org.ethereum.core.Account;
+import org.ethereum.core.Genesis;
 import org.ethereum.core.Transaction;
+import org.ethereum.core.genesis.GenesisLoader;
 import org.ethereum.util.blockchain.StandaloneBlockchain;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.spongycastle.util.encoders.Hex;
 
+import static org.ethereum.util.FastByteComparisons.equal;
 import static org.ethereum.util.blockchain.EtherUtil.Unit.ETHER;
 import static org.ethereum.util.blockchain.EtherUtil.convert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * class_name: preallocGenesisTest
@@ -28,30 +34,40 @@ import static org.ethereum.util.blockchain.EtherUtil.convert;
 public class StandardBlockMiningTest {
 
     //WARNING YOU WILL WANT TO ALTER THIS STRING FOR YOUR LOCAL MACHINE !!!
-    public static final String PATH = "/Users/harrisonhicks/Documents/github_nominis/ethereumj/ethereumj-core/src/test/java/org/nominis/export/resources/allocated-genesis.json";
+    public static String PATH = "/Users/harrisonhicks/Documents/github_nominis/ethereumj/ethereumj-core/src/test/resources/genesis/allocated-genesis.json";
     public StandaloneBlockchain sb;
     public ArrayList<Account> accounts;
     public ArrayList<Transaction> transactions;
-
+    public static Genesis genesis;
+    public final int numAccounts = 5;
+    public long[] initialBalances;
     /**
      * Tests accountGenerator to create a list of accounts, and writes to json file.
      */
     @Test
-    public void toJsonFile() {
+    public void ReadFromJsonFile() {
 
         //create arrayList of accounts.
         Random rand = new Random();
-        accountGenerator aGen = new accountGenerator(5);
-        accounts = aGen.getGeneratedAccounts(12);
+        accountGenerator aGen = new accountGenerator(numAccounts);
+        accounts = aGen.getGeneratedAccounts();
 
         //initializes random initial balance amounts using the alloc field in the genesis block and writes to json file.
         JSONObject addresses = new JSONObject();
         JSONObject genesisJSon = new JSONObject();
         JSONObject balance;
-        for(Account a : accounts ) {
+        long amount;
+        initialBalances = new long[numAccounts];
+        for(int i =0;i < accounts.size();i++) {
             balance = new JSONObject();
-            balance.put("balance",convert(Math.abs(rand.nextLong()), ETHER).toString());
-            addresses.put(Hex.toHexString(a.getAddress()),balance);
+
+            //store initial amounts in array for later reference
+            amount = Math.abs(rand.nextLong());
+            initialBalances[i] = amount;
+
+            //convert amount into weis and encode as JSON object
+            balance.put("balance",convert(amount, ETHER).toString());
+            addresses.put(Hex.toHexString(accounts.get(i).getAddress()),balance);
 
         }
 
@@ -75,21 +91,46 @@ public class StandardBlockMiningTest {
         {
             System.out.println("Java IO exception caught when trying to write to file");
         }
+
+        genesis = GenesisLoader.loadGenesis(
+                getClass().getResourceAsStream("/genesis/allocated-genesis.json"));
+        final StandaloneBlockchain bc = new StandaloneBlockchain();
+        bc.withGenesis(genesis);
+
+        //First check that initialBalances and accounts are size-compatible
+        assertEquals(accounts.size(), initialBalances.length);
+
+
+        //select random account 'j' and check that balance of 'j' has been recorded to blockchain.
+        int j = rand.nextInt(accounts.size());
+        final byte[] randomAccount = accounts.get(j).getAddress();
+
+        System.out.println(Hex.toHexString(accounts.get(j).getAddress()));
+        final BigInteger retrievedBalance = bc.getBlockchain().getRepository().getBalance(randomAccount);
+        final long actualBalance = initialBalances[j];
+
+        assertEquals(BigInteger.valueOf(actualBalance), retrievedBalance);
+    }
+
+    @Test
+    public void standAloneBlockchainReadFromGenesis(){
+
     }
 
     @Test
     public void multipleTransactions(){
-        accountGenerator aGen = new accountGenerator(5);
-        transactions = createTransactions.getTransactions(accounts,10);
-
-        int counter = 0;
-        for(Transaction tRandom : transactions){
-            System.out.println("Transaction "+counter);
-            System.out.println(tRandom.toString());
-            System.out.println("Raw transaction "+counter+" data: 0x{}" + org.apache.commons.codec.binary.Hex.encodeHexString(tRandom.getEncodedRaw()));
-            counter++;
-        }
+//        transactions = createTransactions.getTransactions(accounts,10);
+//
+//        int counter = 0;
+//        for(Transaction tRandom : transactions){
+//            System.out.println("Transaction "+counter);
+//            System.out.println(tRandom.toString());
+//            System.out.println("Raw transaction "+counter+" data: 0x{}" + org.apache.commons.codec.binary.Hex.encodeHexString(tRandom.getEncodedRaw()));
+//            counter++;
+//        }
 
     }
+
+
 }
 
