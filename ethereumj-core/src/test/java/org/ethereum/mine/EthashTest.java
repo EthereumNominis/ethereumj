@@ -18,7 +18,7 @@
 package org.ethereum.mine;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.ethereum.TestUtils;
+import org.nominis.export.TestUtils;
 import org.ethereum.config.SystemProperties;
 import org.ethereum.core.Block;
 import org.ethereum.util.ByteUtil;

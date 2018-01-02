@@ -1,10 +1,7 @@
-package org.ethereum.mithril;
+package org.nominis.export;
 
-        import com.typesafe.config.ConfigException;
-        import org.apache.commons.codec.binary.Hex;
         import org.ethereum.core.Account;
 
-        import java.math.BigInteger;
         import java.util.ArrayList;
         import java.util.Random;
 
@@ -59,48 +56,25 @@ public class accountGenerator {
      * -----------------------------------------
      **/
 
-    public ArrayList<Account> getGeneratedAccounts(int numBits) {
+
+    public ArrayList<Account> getGeneratedAccounts() {
         Account itemAccount;
-        BigInteger initialBalance;
+        ArrayList<Account> listOfAccount = new ArrayList<Account>();
         try {
             if (accounts.size() == 0) {
-                System.out.println("accounts instantiated");
                 for (int i = 0; i < numberOfAccount; i++) {
                     itemAccount = new Account();
                     itemAccount.init();
-                    System.out.println("item initialized");
-
-                    initialBalance = new BigInteger(numBits, this.rand);
-                    System.out.println("Initial Balance: "+initialBalance);
-                    itemAccount.setBalance(initialBalance);
-                    System.out.println("balance set");
-
-                    System.out.println("accounts "+i+" Address is: "+itemAccount.getAddress());
-                    accounts.add(itemAccount);
+                    listOfAccount.add(itemAccount);
                 }
+                this.accounts = listOfAccount;
                 return this.accounts;
             } else return this.accounts;
         }
-        catch (NullPointerException e) {
-            System.out.println("NULL POINTER EXCEPTION ENCOUNTERED WHILE ADDING ACCOUNTS TO LOOP AT CYCLE ");
-            throw new NullPointerException();
-        }
-    }
+        catch(NullPointerException e){
+            System.out.println("problem with getGeneratedAccounts function");
+            return null;
 
-    public ArrayList<Account> getGeneratedEmptyAccounts(int numBits) {
-        Account itemAccount;
-        ArrayList<Account> listOfAccount = new ArrayList<Account>();
-        if(accounts == null) {
-            for (int i = 0; i < numberOfAccount; i++) {
-                itemAccount = new Account();
-                itemAccount.init();
-                System.out.println(itemAccount.getAddress());
-                listOfAccount.add(itemAccount);
-            }
-            this.accounts = listOfAccount;
-            return this.accounts;
         }
-        else return this.accounts;
-
     }
 }

@@ -17,7 +17,7 @@
  */
 package org.ethereum.sync;
 
-import org.ethereum.TestUtils;
+import org.nominis.export.TestUtils;
 import org.ethereum.core.Block;
 import org.ethereum.core.BlockHeader;
 import org.ethereum.core.BlockHeaderWrapper;

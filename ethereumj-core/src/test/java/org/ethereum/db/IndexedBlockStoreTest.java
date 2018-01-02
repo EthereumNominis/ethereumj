@@ -18,8 +18,6 @@
 package org.ethereum.db;
 
 import org.ethereum.config.SystemProperties;
-import org.ethereum.config.blockchain.FrontierConfig;
-import org.ethereum.config.net.MainNetConfig;
 import org.ethereum.core.Block;
 import org.ethereum.core.Genesis;
 import org.ethereum.datasource.DbSource;
@@ -42,7 +40,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 import static java.math.BigInteger.ZERO;
-import static org.ethereum.TestUtils.*;
+import static org.nominis.export.TestUtils.*;
 import static org.ethereum.util.ByteUtil.wrap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
