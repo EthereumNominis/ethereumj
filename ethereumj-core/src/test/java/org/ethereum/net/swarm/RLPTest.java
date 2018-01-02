@@ -72,7 +72,7 @@ public class RLPTest {
     }
 
     @Test
-    public void frameHaderTest() {
+    public void frameHeaderTest() {
         byte[] bytes = Hex.decode("c28080");
         RLPList list = RLP.decode2(bytes);
         System.out.println(list.size());

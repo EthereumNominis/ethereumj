@@ -224,6 +224,10 @@ public class StandaloneBlockchain implements LocalBlockchain {
         return txes;
     }
 
+    public Genesis getGenesis() {
+        return genesis;
+    }
+
     public PendingStateImpl getPendingState() {
         return pendingState;
     }
@@ -512,6 +516,7 @@ public class StandaloneBlockchain implements LocalBlockchain {
 
         return blockchain;
     }
+
 
     public class SolidityFunctionImpl implements SolidityFunction {
         SolidityContractImpl contract;

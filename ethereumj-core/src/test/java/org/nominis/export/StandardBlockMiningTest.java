@@ -1,25 +1,29 @@
 package org.nominis.export;
 
+import org.ethereum.config.SystemProperties;
 import org.ethereum.core.*;
 import org.ethereum.core.genesis.GenesisLoader;
+import org.ethereum.mine.Ethash;
+import org.ethereum.util.RLP;
 import org.ethereum.util.blockchain.StandaloneBlockchain;
 import org.json.simple.JSONObject;
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
 
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.spongycastle.util.encoders.Hex;
 
 
+import static org.ethereum.core.ImportLightTest.createBlockchain;
 import static org.ethereum.util.FastByteComparisons.equal;
 import static org.ethereum.util.blockchain.EtherUtil.Unit.ETHER;
 import static org.ethereum.util.blockchain.EtherUtil.convert;
@@ -35,6 +39,7 @@ import static org.junit.Assert.assertTrue;
  * create_time: 9:33 AM
  **/
 
+@FixMethodOrder(MethodSorters.DEFAULT)
 public class StandardBlockMiningTest {
         // fields used together with @Parameter must be public
 
@@ -54,11 +59,14 @@ public class StandardBlockMiningTest {
 
         private long[] initialBalances;
 
+        private String hardCodedAddress;
+
     /**
      * Tests accountGenerator to create a list of accounts, and writes to json file.
      */
     @Test
     public void ReadFromJsonFile() {
+
 
         //create arrayList of accounts.
         Random rand = new Random();
@@ -71,6 +79,7 @@ public class StandardBlockMiningTest {
         JSONObject balance;
         long amount;
         initialBalances = new long[numAccounts];
+
         for (int i = 0; i < accounts.size(); i++) {
             balance = new JSONObject();
 
@@ -84,12 +93,24 @@ public class StandardBlockMiningTest {
 
         }
 
+
+        // HARD CODED AMOUNT FOR TESTING LATER
+        balance = new JSONObject();
+        balance.put("balance","1");
+        Account hardCoded = new Account();
+        hardCoded.init();
+        hardCodedAddress = Hex.toHexString(hardCoded.getAddress());
+        addresses.put(hardCodedAddress, balance);
+
+
+
         genesisJSon.put("alloc", addresses);
         genesisJSon.put("nonce", "0x0000000000000000");
-        genesisJSon.put("difficulty", "0x10");
+        // low difficulty
+        genesisJSon.put("difficulty", "0x000002");
         genesisJSon.put("mixhash", "0x0000000000000000000000000000000000000000000000000000000000000000");
-        genesisJSon.put("coinbase", "0x0000000000000000000000000000000000000000");
         genesisJSon.put("timestamp", "0x00");
+        genesisJSon.put("coinbase", "0x0000000000000000000000000000000000000000");
         genesisJSon.put("parentHash", "0x0000000000000000000000000000000000000000000000000000000000000000");
         genesisJSon.put("extraData", "0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa");
         genesisJSon.put("gasLimit", "0x1000000000");
@@ -102,34 +123,60 @@ public class StandardBlockMiningTest {
         } catch (IOException e) {
             System.out.println("Java IO exception caught when trying to write to file");
         }
-
-
-        /**
-         * This section of the test utilizes genesis loader class in an attempt to read from the genesis file created previously
-         */
     }
 
     @Test
-    public void readFromGenesis(){
-        Random rand = new Random();
+    public void mineSingleBlock() throws Exception{
+        ReadFromJsonFile();
+
+        BlockchainImpl blockchain = createBlockchain(GenesisLoader.loadGenesis(
+                getClass().getResourceAsStream("/genesis/allocated-genesis.json")));
+        blockchain.setMinerCoinbase(Hex.decode("ee0250c19ad59305b2bdb61f34b45b72fe37154f"));
+        Block parent = blockchain.getBestBlock();
+
+        System.out.println("Mining #1 ...");
+        Block b1 = blockchain.createNewBlock(parent, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        Ethash.getForBlock(SystemProperties.getDefault(), b1.getNumber()).mineLight(b1).get();
+        ImportResult importResult = blockchain.tryToConnect(b1);
+        System.out.println("Best: " + blockchain.getBestBlock().getShortDescr());
+        Assert.assertTrue(importResult == ImportResult.IMPORTED_BEST);
+
+
+
+
+    }
+
+    @Test
+    public void AllocStandAloneBlockchainTest(){
+        ReadFromJsonFile();
+
+        StandaloneBlockchain bc = new StandaloneBlockchain();
         genesis = GenesisLoader.loadGenesis(
                 getClass().getResourceAsStream("/genesis/allocated-genesis.json"));
-        final StandaloneBlockchain bc = new StandaloneBlockchain();
         bc.withGenesis(genesis);
+        bc.createBlock();
+    }
 
-        //First check that initialBalances and accounts are size-compatible
-        assertEquals(accounts.size(), initialBalances.length);
+    /**
+     * I cannot figure out why this will not work.
+     */
+    @Test
+    public void getBalance_From_Repository_In_StandaloneBlockchain() {
+        ReadFromJsonFile();
+
+        final Genesis genesis = GenesisLoader.loadGenesis(
+                getClass().getResourceAsStream("/genesis/allocated-genesis.json"));
+        final StandaloneBlockchain bc = new StandaloneBlockchain();
+
+        bc.withGenesis(genesis);
+        bc.createBlock();
+        final byte[] account = Hex.decode(hardCodedAddress);
+        long expectedBalance = 1;       //FF
+
+        final BigInteger actualBalance = bc.getBlockchain().getRepository().getBalance(account);
 
 
-        //select random account 'j' and check that balance of 'j' has been recorded to blockchain.
-        int j = rand.nextInt(accounts.size());
-        final byte[] randomAccount = accounts.get(j).getAddress();
-
-        System.out.println(Hex.toHexString(accounts.get(j).getAddress()));
-        final BigInteger retrievedBalance = bc.getBlockchain().getRepository().getBalance(randomAccount);
-        final long actualBalance = initialBalances[j];
-
-        assertEquals(BigInteger.valueOf(actualBalance), retrievedBalance);
+        assertEquals(BigInteger.valueOf(expectedBalance), actualBalance);
     }
 
 
