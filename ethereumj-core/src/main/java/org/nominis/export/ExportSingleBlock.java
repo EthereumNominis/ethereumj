@@ -13,7 +13,7 @@ import static org.ethereum.util.blockchain.EtherUtil.convert;
 /**
 * class_name: ExportSingleBlock
 * package: org.nominis.export
-* describe:  TODO
+* describe:  TODO: export single block as *.json file
 * create_user: Yaojin Sun
 * create_date: 12/28/17
 * create_time: 11:33 PM
