@@ -57,11 +57,9 @@ public class BlockTest {
 
     @Test
     public void toJsonFileTest(){
-        System.out.println("test");
-        // from RLP encoding
+        System.out.println("The json file for SAMPLE_BLK_001 is processing...");
         byte[] genesisBytes = Hex.decode(SAMPLE_BLK_001);
         Block genesisFromRLP = new Block(genesisBytes);
-        System.out.println(genesisFromRLP);
         genesisFromRLP.toJsonFile();
     }
 }
