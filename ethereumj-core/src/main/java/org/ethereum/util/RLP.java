@@ -78,7 +78,7 @@ public class RLP {
      * so RLP would not have been able to store objects above 4gb
      * - if we went with 48 then RLP would be fine for 2^128 space, but that's way too much
      * - so 56 and 2^64 space seems like the right place to put the cutoff
-     * - also, that's where Bitcoin's varint does the cutof
+     * - also, that's where Bitcoin's varint does the cutoff
      */
     private static final int SIZE_THRESHOLD = 56;
 

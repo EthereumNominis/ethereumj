@@ -39,4 +39,15 @@ subprojects {
         jcenter()
         maven { url "https://dl.bintray.com/ethereum/maven/" }
     }
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'com.google.code.gson:gson:2.2.4'
+    }
+
+
 }
