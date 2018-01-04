@@ -13,7 +13,7 @@ __Date: Log__
     -   TODO:  put tx info to database
     -   TODO:  build algorithm to apply PoI
 
-
++   Jan, 4, 2018: Importance Score Storage/Database
 
 
 
