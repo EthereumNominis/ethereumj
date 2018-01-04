@@ -24,9 +24,9 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.nominis.export.TestUtils.randomBytes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.nominis.export.TestUtils.randomBytes;
 
 @Ignore
 public class LevelDbDataSourceTest {
@@ -34,12 +34,13 @@ public class LevelDbDataSourceTest {
     @Test
     public void testBatchUpdating() {
         LevelDbDataSource dataSource = new LevelDbDataSource("test");
+        dataSource.reset();
         dataSource.init();
 
-        final int batchSize = 100;
+        final int batchSize = 5;
         Map<byte[], byte[]> batch = createBatch(batchSize);
-        
         dataSource.updateBatch(batch);
+
 
         assertEquals(batchSize, dataSource.keys().size());
         
@@ -49,6 +50,7 @@ public class LevelDbDataSourceTest {
     @Test
     public void testPutting() {
         LevelDbDataSource dataSource = new LevelDbDataSource("test");
+        dataSource.reset();
         dataSource.init();
 
         byte[] key = randomBytes(32);
