@@ -42,22 +42,69 @@ import java.util.List;
 public class Block extends org.ethereum.core.Block implements toJsonFormat {
 
 
+    /**-----------------------------------------
+     * @param citationChain
+     *      An arbitrary byte array containing data relevant to
+     *      random walk answers.
+     *      If no random walk, the number of steps = zero
+     *          and the citationChain = null
+    -----------------------------------------**/
+    private byte[] citationChain = null;
+
+
+
+
+    /**-----------------------------------------
+     * constructors
+    -----------------------------------------**/
+
 
     public Block(byte[] rawData) {
         super(rawData);
     }
 
+
+
     public Block(BlockHeader header, List<Transaction> transactionsList, List<BlockHeader> uncleList) {
         super(header, transactionsList, uncleList);
     }
 
+    public Block(BlockHeader header, List<Transaction> transactionsList, List<BlockHeader> uncleList, byte[] citationChain) {
+        super(header, transactionsList, uncleList);
+        this.citationChain = citationChain;
+    }
+
+
+
+
+
     public Block(byte[] parentHash, byte[] unclesHash, byte[] coinbase, byte[] logsBloom, byte[] difficulty, long number, byte[] gasLimit, long gasUsed, long timestamp, byte[] extraData, byte[] mixHash, byte[] nonce, byte[] receiptsRoot, byte[] transactionsRoot, byte[] stateRoot, List<Transaction> transactionsList, List<BlockHeader> uncleList) {
         super(parentHash, unclesHash, coinbase, logsBloom, difficulty, number, gasLimit, gasUsed, timestamp, extraData, mixHash, nonce, receiptsRoot, transactionsRoot, stateRoot, transactionsList, uncleList);
     }
+    public Block(byte[] parentHash, byte[] unclesHash, byte[] coinbase, byte[] logsBloom, byte[] difficulty, long number, byte[] gasLimit, long gasUsed, long timestamp, byte[] extraData, byte[] mixHash, byte[] nonce, byte[] receiptsRoot, byte[] transactionsRoot, byte[] stateRoot, List<Transaction> transactionsList, List<BlockHeader> uncleList, byte[] citationChain) {
+        super(parentHash, unclesHash, coinbase, logsBloom, difficulty, number, gasLimit, gasUsed, timestamp, extraData, mixHash, nonce, receiptsRoot, transactionsRoot, stateRoot, transactionsList, uncleList);
+        this.citationChain = citationChain;
+    }
+
+
+
+
+
+
 
     public Block(byte[] parentHash, byte[] unclesHash, byte[] coinbase, byte[] logsBloom, byte[] difficulty, long number, byte[] gasLimit, long gasUsed, long timestamp, byte[] extraData, byte[] mixHash, byte[] nonce, List<Transaction> transactionsList, List<BlockHeader> uncleList) {
         super(parentHash, unclesHash, coinbase, logsBloom, difficulty, number, gasLimit, gasUsed, timestamp, extraData, mixHash, nonce, transactionsList, uncleList);
     }
+    public Block(byte[] parentHash, byte[] unclesHash, byte[] coinbase, byte[] logsBloom, byte[] difficulty, long number, byte[] gasLimit, long gasUsed, long timestamp, byte[] extraData, byte[] mixHash, byte[] nonce, List<Transaction> transactionsList, List<BlockHeader> uncleList, byte[] citationChain) {
+        super(parentHash, unclesHash, coinbase, logsBloom, difficulty, number, gasLimit, gasUsed, timestamp, extraData, mixHash, nonce, transactionsList, uncleList);
+        this.citationChain = citationChain;
+    }
+
+
+
+
+
+
 
     /**-----------------------------------------
      * export to Json file
@@ -296,9 +343,35 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
 
 
 
+
+    /**-----------------------------------------
+     * init with parseRLP();
+    -----------------------------------------**/
+    private void initParseRLP(){
+        super.getTimestamp();
+    }
+
+
     /**-----------------------------------------
      * get citation chain
     -----------------------------------------**/
+
+
+
+
+
+
+
+
+
+    /**-----------------------------------------
+     * get block size
+    -----------------------------------------**/
+    public long getBlockSize(){
+        initParseRLP();  /**This step is necessary, because we need to run parseRLP();**/
+        byte[] body = super.getEncoded();
+        return body.length;
+    }
 
 
 }

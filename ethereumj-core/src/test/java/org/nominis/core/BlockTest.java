@@ -1,12 +1,12 @@
 package org.nominis.core;
 
 
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
 
+import static org.junit.Assert.assertEquals;
 
 /**-----------------------------------------
  * Nominis Block Test
@@ -57,9 +57,19 @@ public class BlockTest {
 
     @Test
     public void toJsonFileTest(){
-        System.out.println("The json file for SAMPLE_BLK_001 is processing...");
-        byte[] genesisBytes = Hex.decode(SAMPLE_BLK_001);
-        Block genesisFromRLP = new Block(genesisBytes);
+        byte[] BLKBytes = Hex.decode(SAMPLE_BLK_001);
+        Block genesisFromRLP = new Block(BLKBytes);
         genesisFromRLP.toJsonFile();
     }
+
+
+    @Test
+    public void getBlockSizeTest(){
+        byte[] BLKbytes = Hex.decode(SAMPLE_BLK_001);
+        Block BLKfromRLP = new Block(BLKbytes);
+        assertEquals(904, BLKfromRLP.getBlockSize());
+    }
+
+
+
 }
