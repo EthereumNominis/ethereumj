@@ -6,6 +6,18 @@ import org.ethereum.util.RLPList;
 
 import java.math.BigInteger;
 
+
+/**
+* class_name: AccountState
+* package: org.nominis.core
+* describe:
+ * Add Importance Score to ETH accountState
+* create_user: Yaojin Sun
+* create_date: 1/5/18
+* create_time: 12:03 PM
+**/
+
+
 public class AccountState extends org.ethereum.core.AccountState {
 
     /**
