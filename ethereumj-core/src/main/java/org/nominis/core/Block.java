@@ -365,9 +365,13 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
         if (block.size() == 3){
             System.out.println(block.size());
         }else{
-            //FIXME: not finish the return part here. We need to do block generator first,
-            // FIXME: then generate list of blocks with RLP data.
-            // FIXME: then testing this function.
+            /************  FIXME  *************
+             * 1/5/18 @ 5:10 PM
+             * FIXME: not finish the return part here. We need to do block generator first,
+             * FIXME: then generate list of blocks with RLP data.
+             * FIXME: then testing this function.
+            ***********************************/
+            
             System.out.println(block.size());
         }
     }
