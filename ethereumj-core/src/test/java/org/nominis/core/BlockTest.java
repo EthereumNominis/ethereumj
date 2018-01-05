@@ -72,4 +72,14 @@ public class BlockTest {
 
 
 
+    @Test
+    public void getCitationChainTest(){
+        byte[] BLKbytes = Hex.decode(SAMPLE_BLK_001);
+        Block BLKfromRLP = new Block(BLKbytes);
+//        BLKfromRLP.getCitationChain();
+
+    }
+
+
+
 }

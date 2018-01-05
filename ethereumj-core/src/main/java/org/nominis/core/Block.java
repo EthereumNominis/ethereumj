@@ -8,6 +8,8 @@ import com.google.gson.JsonParser;
 import org.ethereum.core.BlockHeader;
 import org.ethereum.core.Transaction;
 import org.ethereum.util.ByteUtil;
+import org.ethereum.util.RLP;
+import org.ethereum.util.RLPList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.nominis.export.toJsonFormat;
@@ -355,6 +357,20 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
     /**-----------------------------------------
      * get citation chain
     -----------------------------------------**/
+    public void getCitationChain(){
+        initParseRLP();
+        byte[] EncodeList = super.getEncoded();
+        RLPList params = RLP.decode2(EncodeList);
+        RLPList block = (RLPList) params.get(0);
+        if (block.size() == 3){
+            System.out.println(block.size());
+        }else{
+            //FIXME: not finish the return part here. We need to do block generator first,
+            // FIXME: then generate list of blocks with RLP data.
+            // FIXME: then testing this function.
+            System.out.println(block.size());
+        }
+    }
 
 
 
@@ -372,6 +388,11 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
         byte[] body = super.getEncoded();
         return body.length;
     }
+
+
+
+
+
 
 
 }
