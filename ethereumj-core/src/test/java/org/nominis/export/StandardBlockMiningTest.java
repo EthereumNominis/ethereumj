@@ -84,7 +84,7 @@ public class StandardBlockMiningTest {
             initialBalances[i] = amount;
 
             //convert amount into weis and encode as JSON object
-            balance.put("balance ", convert(amount, ETHER).toString());
+            balance.put("balance", convert(amount, ETHER).toString());
             addresses.put(Hex.toHexString(accounts.get(i).getAddress()), balance);
             System.out.println("public key "+i+" "+Hex.toHexString(accounts.get(i).getAddress()));
             System.out.println(  Hex.toHexString(accounts.get(i).getEcKey().getPrivKeyBytes())   );
