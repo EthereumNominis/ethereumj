@@ -11,6 +11,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.nominis.core.accountGenerator;
 import org.spongycastle.util.encoders.Hex;
 
 import java.io.FileWriter;
@@ -40,7 +41,7 @@ public class StandardBlockMiningTest {
 
         private BlockchainImpl blockchain;
 
-        private String PATH = "/Users/yaojinsun/projects/Ethereum_Nominis/ethereumj/ethereumj-core/src/main/resources/genesis/test.json";
+        private String PATH = "/Users/harrisonhicks/Documents/github_nominis/ethereumj/ethereumj-core/src/main/resources/genesis/test.json";
 
         private StandaloneBlockchain sb;
 
@@ -74,7 +75,7 @@ public class StandardBlockMiningTest {
         JSONObject balance;
         long amount;
         initialBalances = new long[numAccounts];
-
+        System.out.println("number of accounts:"+accounts.size());
         for (int i = 0; i < accounts.size(); i++) {
             balance = new JSONObject();
 
@@ -83,21 +84,11 @@ public class StandardBlockMiningTest {
             initialBalances[i] = amount;
 
             //convert amount into weis and encode as JSON object
-            balance.put("balance", convert(amount, ETHER).toString());
+            balance.put("balance ", convert(amount, ETHER).toString());
             addresses.put(Hex.toHexString(accounts.get(i).getAddress()), balance);
+            System.out.println("public key "+i+" "+Hex.toHexString(accounts.get(i).getAddress()));
             System.out.println(  Hex.toHexString(accounts.get(i).getEcKey().getPrivKeyBytes())   );
         }
-
-
-        // HARD CODED AMOUNT FOR TESTING LATER
-        balance = new JSONObject();
-        balance.put("balance","1");
-        Account hardCoded = new Account();
-        hardCoded.init();
-        hardCodedAddress = Hex.toHexString(hardCoded.getAddress());
-        addresses.put(hardCodedAddress, balance);
-
-
 
         genesisJSon.put("alloc", addresses);
         genesisJSon.put("nonce", "0x0000000000000000");
