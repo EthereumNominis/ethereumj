@@ -371,7 +371,7 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
              * FIXME: then generate list of blocks with RLP data.
              * FIXME: then testing this function.
             ***********************************/
-            
+
             System.out.println(block.size());
         }
     }
