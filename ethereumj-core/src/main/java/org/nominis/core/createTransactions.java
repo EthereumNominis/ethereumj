@@ -1,4 +1,4 @@
-package org.nominis.export;
+package org.nominis.core;
 
 import com.typesafe.config.ConfigException;
 import org.ethereum.core.Account;
@@ -40,7 +40,7 @@ public class createTransactions {
 
     private static Transaction randomTransaction() {
         try{
-            Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), new BigInteger(randomBytes(2)), new BigInteger(randomBytes(1)), null);
+            Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), new BigInteger(randomBytes(2)), new BigInteger(randomBytes(1)));
             transaction.sign(randomAccount().getEcKey());
             return transaction;
         }
@@ -68,7 +68,7 @@ public class createTransactions {
 
         if(accounts != null){
             //creates the transaction
-            Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), amount, new BigInteger(randomBytes(1)), null);
+            Transaction transaction = Transaction.createDefault(toHexString(randomAccount().getAddress()), amount, new BigInteger(randomBytes(1)));
             return transaction;
         }
         else{

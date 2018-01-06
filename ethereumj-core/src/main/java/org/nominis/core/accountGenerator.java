@@ -1,4 +1,4 @@
-package org.nominis.export;
+package org.nominis.core;
 
         import org.ethereum.core.Account;
 
