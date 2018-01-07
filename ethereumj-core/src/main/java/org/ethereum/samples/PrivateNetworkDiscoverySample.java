@@ -208,7 +208,7 @@ public class PrivateNetworkDiscoverySample {
 
                 .withValue("peer.listen.port", value(20000 + index))
                 .withValue("peer.privateKey", value(Hex.toHexString(ECKey.fromPrivate(("" + index).getBytes()).getPrivKeyBytes())))
-                .withValue("peer.networkId", value(555))
+                .withValue("peer.networkId", value(991))
                 .withValue("sync.enabled", value(true))
                 .withValue("database.incompatibleDatabaseBehavior", value("RESET"))
                 .withValue("genesis", value("sample-genesis.json"))
