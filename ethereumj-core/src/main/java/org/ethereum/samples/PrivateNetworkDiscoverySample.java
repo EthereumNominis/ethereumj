@@ -43,7 +43,7 @@ import java.util.Collection;
  * The sample creates a small private net with three peers:
  *  - first is point for discovery;
  *  - two other ones will connect to first.
- *
+ * 10.130.189.179
  * Peers run on same IP 127.0.0.1 and are different by ports.
  *
  * After some time all peers should find each other. We use `peer.discovery.ip.list` config
@@ -168,7 +168,7 @@ public class PrivateNetworkDiscoverySample {
     private static class Node1Config extends RegularConfig {
 
         public Node1Config() {
-            super(1, "127.0.0.1:20000");
+            super(1, "10.130.189.179:20000");
         }
 
         @Bean
@@ -185,7 +185,7 @@ public class PrivateNetworkDiscoverySample {
     private static class Node2Config extends RegularConfig{
 
         public Node2Config() {
-            super(2, "127.0.0.1:20000");
+            super(2, "10.130.189.179:20000");
         }
 
         @Bean
@@ -206,9 +206,9 @@ public class PrivateNetworkDiscoverySample {
                 .withValue("peer.discovery.bind.ip", value("127.0.0.1"))
                 .withValue("peer.discovery.persist", value("false"))
 
-                .withValue("peer.listen.port", value(20000 + index))
+                .withValue("peer.listen.port", value(30303 + index))
                 .withValue("peer.privateKey", value(Hex.toHexString(ECKey.fromPrivate(("" + index).getBytes()).getPrivKeyBytes())))
-                .withValue("peer.networkId", value(555))
+                .withValue("peer.networkId", value(991))
                 .withValue("sync.enabled", value(true))
                 .withValue("database.incompatibleDatabaseBehavior", value("RESET"))
                 .withValue("genesis", value("sample-genesis.json"))
