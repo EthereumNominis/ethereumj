@@ -285,6 +285,13 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
             JSONObject TxItem;
             for (Transaction tx : getTransactionsList()){
                 TxItem = new JSONObject();
+                // value
+                if (tx.getValue() != null) {
+                    TxItem.put("value", "0x" + Hex.toHexString(tx.getValue()));
+                } else {
+                    TxItem.put("value", "0x0");
+                }
+
                 // data
                 if (tx.getData() != null){
                     TxItem.put("data", "0x" + Hex.toHexString(tx.getData()));
@@ -332,7 +339,7 @@ public class Block extends org.ethereum.core.Block implements toJsonFormat {
             JsonParser jp = new JsonParser();
             JsonElement je = jp.parse(blockMap.toJSONString());
             String prettyJson = gson.toJson(je);
-            String fileName = "Nominis_" + getNumber() + ".json";
+            String fileName = "Nominis_" + getNumber() + "_.json";
             FileWriter JsonFile = new FileWriter(fileName);
             JsonFile.write(prettyJson);
             JsonFile.flush();
