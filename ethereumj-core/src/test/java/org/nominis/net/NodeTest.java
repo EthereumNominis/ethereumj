@@ -6,7 +6,6 @@ package org.nominis.net;
 import org.ethereum.crypto.ECKey;
 import org.ethereum.net.rlpx.Node;
 import org.junit.Test;
-import org.spongycastle.util.BigIntegers;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
@@ -16,6 +15,21 @@ import static org.junit.Assert.assertEquals;
 
 
 public class NodeTest {
+
+
+
+    /**-----------------------------------------------------------
+     * generally speaking, the Ethereum generate an account first,
+     * by utilizing the private key, public key and account address info,
+     * Node.java is able to build new node.
+     * NOTE: A complete account would also need more info, like port, ip.
+     * NOTE: Check @ethereumj-core\src\main\java\org\ethereum\net\rlpx\Node.java$ for more info
+     -----------------------------------------------------------**/
+
+
+
+
+
     @Test
     public void generateNewRandomNode(){
         /**
@@ -46,6 +60,7 @@ public class NodeTest {
         String generatedNodeId = Hex.toHexString(generatedNodeKey.getNodeId());
         System.out.println("NodeID:\t" + generatedNodeId);
         assertEquals("c4370be6ccd6704d6284978f6701a5018914e795bc6c4b4c3277f749a25be8b919f9bc155e292f7cbb8ff3ce54847c6a3bb222d3a241d2cba312ee8ba525638f", generatedNodeId);
+
 
 
 
