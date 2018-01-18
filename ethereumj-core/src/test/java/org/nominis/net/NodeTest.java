@@ -55,12 +55,12 @@ public class NodeTest {
         BigInteger seedNumber = BigInteger.valueOf(1111111111);
         ECKey Account1 = ECKey.fromPrivate(seedNumber);
         System.out.println(  "Account 1: " + Hex.toHexString(Account1.getAddress())   );
-        assertEquals("784c95c102441f6df296aca7920056ed7a424d1f",Hex.toHexString(Account1.getAddress()));
+//        assertEquals("784c95c102441f6df296aca7920056ed7a424d1f",Hex.toHexString(Account1.getAddress()));
         ECKey generatedNodeKey = ECKey.fromPrivate(sha3(Account1.getAddress()));
         String generatedNodeId = Hex.toHexString(generatedNodeKey.getNodeId());
         System.out.println("NodeID:\t" + generatedNodeId);
-        assertEquals("c4370be6ccd6704d6284978f6701a5018914e795bc6c4b4c3277f749a25be8b919f9bc155e292f7cbb8ff3ce54847c6a3bb222d3a241d2cba312ee8ba525638f", generatedNodeId);
-
+//        assertEquals("c4370be6ccd6704d6284978f6701a5018914e795bc6c4b4c3277f749a25be8b919f9bc155e292f7cbb8ff3ce54847c6a3bb222d3a241d2cba312ee8ba525638f", generatedNodeId);
+        System.out.println(Hex.toHexString(Account1.getPrivKeyBytes()));
 
 
 
