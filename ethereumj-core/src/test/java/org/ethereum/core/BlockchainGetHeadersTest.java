@@ -87,7 +87,6 @@ public class BlockchainGetHeadersTest {
 
 
     private class BlockchainImplTester extends BlockchainImpl {
-
         public BlockchainImplTester() {
             blockStore = new BlockStoreMock();
             setRepository(new RepositoryRoot(new HashMapDB<byte[]>()));
